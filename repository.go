@@ -22,7 +22,7 @@ func (c *Client) SearchRepositories(ctx context.Context, owner string, pkgName s
 
 	repoSet := make(map[Repository]struct{})
 
-	query := fmt.Sprintf("user:%s %s", owner, pkgName)
+	query := fmt.Sprintf("user:%s language:go -path:vendor/ import %s", owner, pkgName)
 	opt := &github.SearchOptions{
 		ListOptions: github.ListOptions{PerPage: 100, Page: 1},
 	}
@@ -47,7 +47,7 @@ func (c *Client) SearchRepositories(ctx context.Context, owner string, pkgName s
 		}
 		opt.Page = resp.NextPage
 
-		time.Sleep(5 * time.Second)
+		time.Sleep(15 * time.Second)
 	}
 
 	repos := make([]*Repository, 0, len(repoSet))
